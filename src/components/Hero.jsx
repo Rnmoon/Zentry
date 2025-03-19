@@ -17,16 +17,18 @@ const Hero = () => {
     const nextVdRef = useRef(null);
 
     const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
-    const handleMiniVdClick = () => {
-        setHasClicked(true);
-        setCurrentIndex(upcomingVideoIndex);
-    };
 
     useEffect(()=>{
         if(loadedVideos === totalVideos -1){
             setIsLoading(false);
         }
     },[loadedVideos])
+    const handleMiniVdClick = () => {
+        setHasClicked(true);
+        setCurrentIndex(upcomingVideoIndex);
+    };
+
+    
     useGSAP(()=>{
         if(hasClicked){
             gsap.set('#next-video',{visibility:'visible'});
@@ -52,7 +54,7 @@ const Hero = () => {
 
     useGSAP(()=>{
         gsap.set('#video-frame',{
-            clipPath: 'polygon(14% 0%, 72% 0%, 90% 100%, 0% 100%)',
+            clipPath: 'polygon(14% 0%, 72% 0%, 88% 90%, 0% 95%)',
             borderRadius: '0 0 40% 10%'
         });
         gsap.from('#video-frame',{
