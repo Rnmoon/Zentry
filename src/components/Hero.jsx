@@ -31,7 +31,7 @@ const Hero = () => {
     
     useGSAP(()=>{
         if(hasClicked){
-            gsap.set('#next-video',{visibility:'visible'});
+            gsap.set("#next-video",{visibility:'visible'});
 
             gsap.to('#next-video',{
                 transformOrigin:'center center',
@@ -44,8 +44,8 @@ const Hero = () => {
             })
             gsap.from('#current-video',{
                 transformOrigin:'center center',
-                scale:1,
-                duration:1,
+                scale:0,
+                duration:1.5,
                 ease:'power1.inOut',
                 
             })
@@ -59,10 +59,10 @@ const Hero = () => {
         });
         gsap.from('#video-frame',{
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-            borderRadius: '0 0 0 0',
+            borderRadius: '0% 0% 0% 0%',
             ease:'power1.inOut',
             scrollTrigger:{
-                trigger: 'video-frame',
+                trigger: '#video-frame',
                 start: 'center center',
                 end: 'bottom center',
                 scrub: true,
@@ -104,7 +104,7 @@ const Hero = () => {
                     id="next-video"
                     className="absolute-center invisible absolute z-20 size-64 object-cover object-center" onLoadedData={handleVideoLoad}/>
                     <video src={getVideoSrc(currentIndex === totalVideos -1 ? 1 : currentIndex)}
-                    autoPlay
+                    // autoPlay
                     loop
                     muted
                     className="absolute left-0 top-0 size-full object-cover object-center" onLoadedData={handleVideoLoad}/>
