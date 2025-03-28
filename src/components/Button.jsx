@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Button = ({title,id,leftIcon,rightIcon,containerClass}) => {
+const Button = ({title,id,leftIcon,containerClass}) => {
   return (
     <button id={id} className={`group relative z-10 w-fit cursor-pointer overflow-hidden font-bold rounded-full px-7 py-3 text-black ${containerClass}`}>
         {leftIcon}
