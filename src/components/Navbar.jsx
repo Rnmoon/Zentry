@@ -1,15 +1,15 @@
 import {useEffect, useRef,useState} from 'react'
 import { TiLocationArrow } from 'react-icons/ti'
 import Button from './Button';
-import { useWindowScroll } from 'react-use';4
+import { useWindowScroll } from 'react-use';
 import gsap from 'gsap';
 
 const navItems = ['Nexus','Vault','Prologue','About','Contact'];
 const Navbar = () => {
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-    const [isIndicatorActive, setisIndicatorActive] = useState(false)
+    const [isIndicatorActive, setisIndicatorActive] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
-    const [isNavVisible, setisNavVisible] = useState(true)
+    const [isNavVisible, setisNavVisible] = useState(true);
 
     const navContainerRef = useRef(null);
     const audioElementRef = useRef(null);
@@ -38,16 +38,26 @@ const Navbar = () => {
     },[isNavVisible]);
 
     const toggleAudioIndicator = () => {
-        setIsAudioPlaying((prev)=> !prev);
-        setisIndicatorActive((prev)=> !prev);
+        setIsAudioPlaying(!isAudioPlaying);
+        setisIndicatorActive(!isAudioPlaying); // Sync indicator active state with audio playing state
     }
-    useEffect(()=>{
-        if(isAudioPlaying){
-            audioElementRef.current.play();
-        }{
-            audioElementRef.current.pause();
+    
+    useEffect(() => {
+        const audioElement = audioElementRef.current;
+        if (!audioElement) return;
+        
+        if (isAudioPlaying) {
+            // Try to play and handle any errors
+            audioElement.play().catch(error => {
+                console.error("Audio playback failed:", error);
+                setIsAudioPlaying(false);
+                setisIndicatorActive(false);
+            });
+        } else {
+            audioElement.pause();
         }
-    },[isAudioPlaying])
+    }, [isAudioPlaying]);
+    
   return (
     <div ref={navContainerRef} className='fixed inset-x-0 top-4 z-50 h-16 border-none transition-all duration-700 sm:inset-x-6'>
         <header className='absolute top-1/2 w-full -translate-y-1/2'>
@@ -69,10 +79,18 @@ const Navbar = () => {
                             </a>
                         ))}
                     </div>
-                    <button className='ml-10 flex items-center space-x-0.5' onClick={toggleAudioIndicator}>
-                        <audio ref={audioElementRef} className='hidden' src="/audio/loop.mp3" loop/>
+                    <button 
+                        className='ml-10 flex items-center space-x-0.5' 
+                        onClick={toggleAudioIndicator}
+                        aria-label={isAudioPlaying ? "Pause music" : "Play music"}
+                    >
+                        <audio ref={audioElementRef} src="/audio/loop.mp3" loop preload="auto" />
                         {[1,2,3,4].map((bar)=>(
-                            <div key={bar} className={`indicator-line ${isIndicatorActive ? 'active' : ''}`} style={{animationDelay: `${bar * 0.1}s`}}/>
+                            <div 
+                                key={bar} 
+                                className={`indicator-line ${isIndicatorActive ? 'active' : ''}`} 
+                                style={{'--animation-order': bar}}
+                            />
                         ))}
                     </button>
                 </div>
